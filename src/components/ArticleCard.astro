@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import CategoryChips from './CategoryChips.astro';
+import { formatDate, machineDate, readingTime } from '../lib/site';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  featured?: boolean;
+}
+const { post, featured = false } = Astro.props;
+const Heading = featured ? 'h2' : 'h2';
+---
+
+<article class:list={['article-card', { featured }]}>
+  <div class="article-card-meta">
+    <time datetime={machineDate(post.data.publishedAt)}
+      >{formatDate(post.data.publishedAt)}</time
+    >
+    <span aria-hidden="true">·</span>
+    <span>{readingTime(post.body)} min read</span>
+  </div>
+  <Heading><a href={`/articles/${post.id}/`}>{post.data.title}</a></Heading>
+  <p>{post.data.description}</p>
+  <CategoryChips categories={post.data.categories} />
+</article>

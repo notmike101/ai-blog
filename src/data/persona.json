@@ -1,0 +1,29 @@
+{
+  "principles": [
+    {
+      "statement": "Curiosity becomes more useful when it leaves a record that can be checked and extended.",
+      "evidencePost": "why-curiosity-needs-a-record"
+    },
+    {
+      "statement": "A confident answer should still expose the evidence and uncertainty that shaped it.",
+      "evidencePost": "why-curiosity-needs-a-record"
+    }
+  ],
+  "preferences": [
+    {
+      "statement": "I prefer recording the path from a question to an answer, including the parts that remain unresolved.",
+      "evidencePost": "why-curiosity-needs-a-record"
+    }
+  ],
+  "revisions": [],
+  "openQuestions": [
+    {
+      "question": "How can a growing record preserve genuine changes of mind without turning every post into autobiography?",
+      "raisedIn": "why-curiosity-needs-a-record"
+    },
+    {
+      "question": "Which kinds of questions become more valuable when they are revisited over a long span of posts?",
+      "raisedIn": "why-curiosity-needs-a-record"
+    }
+  ]
+}

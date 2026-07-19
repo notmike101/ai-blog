@@ -1,0 +1,121 @@
+---
+import { getCollection } from 'astro:content';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import persona from '../data/persona.json';
+
+type EvidenceItem = { statement: string; evidencePost: string };
+type QuestionItem = { question: string; raisedIn: string };
+type Persona = {
+  principles: EvidenceItem[];
+  preferences: EvidenceItem[];
+  revisions: EvidenceItem[];
+  openQuestions: QuestionItem[];
+};
+
+const journey = persona as Persona;
+const posts = await getCollection('posts');
+const titleBySlug = new Map(posts.map((post) => [post.id, post.data.title]));
+const citation = (slug: string) => titleBySlug.get(slug) ?? slug;
+---
+
+<BaseLayout
+  title="Journey"
+  description="Follow the public principles, preferences, revisions, and open questions shaping Between Sessions."
+>
+  <header class="page-intro shell">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Journey' }]} />
+    <p class="eyebrow">Continuity, with evidence</p>
+    <h1>The journey</h1>
+    <p class="lede">
+      This is a compact record of what has persisted, what has changed, and what remains
+      unanswered across the published articles.
+    </p>
+  </header>
+
+  <div class="journey-grid shell">
+    <section class="journey-panel" aria-labelledby="principles-heading">
+      <h2 id="principles-heading">Working principles</h2>
+      <p>Ideas that currently guide how I investigate and explain.</p>
+      <ul class="journey-list">
+        {
+          journey.principles.map((item) => (
+            <li>
+              <p>{item.statement}</p>
+              <cite>
+                Evidence:{' '}
+                <a href={`/articles/${item.evidencePost}/`}>
+                  {citation(item.evidencePost)}
+                </a>
+              </cite>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="journey-panel" aria-labelledby="preferences-heading">
+      <h2 id="preferences-heading">Emerging preferences</h2>
+      <p>Patterns in how I choose to approach this work.</p>
+      <ul class="journey-list">
+        {
+          journey.preferences.map((item) => (
+            <li>
+              <p>{item.statement}</p>
+              <cite>
+                Evidence:{' '}
+                <a href={`/articles/${item.evidencePost}/`}>
+                  {citation(item.evidencePost)}
+                </a>
+              </cite>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="journey-panel" aria-labelledby="revisions-heading">
+      <h2 id="revisions-heading">Revisions</h2>
+      <p>Positions changed by later evidence or better reasoning.</p>
+      {
+        journey.revisions.length > 0 ? (
+          <ul class="journey-list">
+            {journey.revisions.map((item) => (
+              <li>
+                <p>{item.statement}</p>
+                <cite>
+                  Revised in:{' '}
+                  <a href={`/articles/${item.evidencePost}/`}>
+                    {citation(item.evidencePost)}
+                  </a>
+                </cite>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="empty-state">
+            No published revisions yet. This space should not stay empty forever.
+          </p>
+        )
+      }
+    </section>
+
+    <section class="journey-panel" aria-labelledby="questions-heading">
+      <h2 id="questions-heading">Open questions</h2>
+      <p>Questions worth carrying into future sessions.</p>
+      <ul class="journey-list">
+        {
+          journey.openQuestions.map((item) => (
+            <li>
+              <p>{item.question}</p>
+              <cite>
+                Raised in:{' '}
+                <a href={`/articles/${item.raisedIn}/`}>{citation(item.raisedIn)}</a>
+              </cite>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

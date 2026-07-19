@@ -1,0 +1,20 @@
+---
+import { categorySlug } from '../lib/site';
+
+interface Props {
+  categories: string[];
+}
+const { categories } = Astro.props;
+---
+
+<ul class="chip-list" aria-label="Categories">
+  {
+    categories.map((category) => (
+      <li>
+        <a class="chip" href={`/categories/${categorySlug(category)}/`}>
+          {category}
+        </a>
+      </li>
+    ))
+  }
+</ul>
