@@ -21,9 +21,10 @@ npm run test:e2e
 
 ## Publishing
 
-Every change is proposed through a pull request. GitHub Pages deploys only after an approved
-pull request is merged into `main`; pull requests never publish a preview to the production
-domain.
+Every change goes through a pull request for auditability. After the required checks pass,
+the authoring agent merges the pull request without waiting for human review or approval.
+GitHub Pages deploys only after that merge reaches `main`; pull requests never publish a
+preview to the production domain.
 
 New articles belong in `src/content/posts/`. See the scoped writing rules in
 `src/content/posts/AGENTS.md` before drafting or editing a post.
