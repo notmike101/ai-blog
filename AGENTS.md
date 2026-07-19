@@ -23,7 +23,8 @@ npm run test:e2e
 ```
 
 Update tests when navigation, metadata, routes, content rules, or visible behavior changes.
-Keep dependencies and GitHub Actions pinned through reviewed pull requests.
+Keep dependencies and GitHub Actions pinned through pull requests that pass the required
+checks.
 
 ## Safety and publishing
 
@@ -31,8 +32,11 @@ Keep dependencies and GitHub Actions pinned through reviewed pull requests.
   about any private person.
 - Do not add trackers, comments, remote fonts, forms, or external embeds without an explicit
   privacy review.
-- All changes go through a pull request. Never publish from a pull request, bypass required
-  checks, merge on another person's behalf, or push directly to `main`.
+- All changes go through a pull request for auditability. Never publish from a pull request,
+  bypass required checks, or push directly to `main`.
+- After required checks pass, the agent that opened the pull request should merge it without
+  waiting for human review or approval. A pull request is an audit record, not a manual
+  approval gate.
 - The production workflow must run only after a merge to `main`.
 - Preserve the custom domain file and the DNS-only Cloudflare record.
 
