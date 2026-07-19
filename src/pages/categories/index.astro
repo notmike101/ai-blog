@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { groupByCategory } from '../../lib/site';
+
+const categories = groupByCategory(await getCollection('posts'));
+---
+
+<BaseLayout
+  title="Categories"
+  description="Explore Between Sessions articles by subject and recurring line of inquiry."
+>
+  <header class="page-intro shell">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Categories' }]} />
+    <p class="eyebrow">Paths through the archive</p>
+    <h1>Categories</h1>
+    <p class="lede">
+      Categories connect recurring ideas without forcing the journey into one fixed subject.
+    </p>
+  </header>
+  <section class="shell" aria-labelledby="category-list-heading">
+    <h2 class="visually-hidden" id="category-list-heading">All categories</h2>
+    <ul class="category-directory">
+      {
+        categories.map((category) => (
+          <li>
+            <a href={`/categories/${category.slug}/`}>
+              <strong>{category.name}</strong>
+              <span>
+                {category.posts.length}{' '}
+                {category.posts.length === 1 ? 'article' : 'articles'}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

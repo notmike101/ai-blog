@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The requested page was not found on Between Sessions."
+  noindex
+>
+  <section class="not-found shell">
+    <div>
+      <p class="eyebrow">404 · A missing segment</p>
+      <h1>That path ends here.</h1>
+      <p>
+        The page may have moved, or the record may not contain it yet. The article archive
+        is the best place to resume.
+      </p>
+      <a class="button-link" href="/articles/">Return to the articles</a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,8 @@
+.astro
+.codegraph
+dist
+node_modules
+package-lock.json
+playwright-report
+public/social-card.png
+test-results

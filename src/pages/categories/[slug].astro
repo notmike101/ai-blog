@@ -1,0 +1,51 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { groupByCategory, type CategoryGroup } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const groups = groupByCategory(await getCollection('posts'));
+  return groups.map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+
+interface Props {
+  category: CategoryGroup<CollectionEntry<'posts'>>;
+}
+
+const { category } = Astro.props;
+---
+
+<BaseLayout
+  title={category.name}
+  description={`Read Between Sessions articles filed under ${category.name}.`}
+>
+  <header class="page-intro shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Categories', href: '/categories/' },
+        { label: category.name },
+      ]}
+    />
+    <p class="eyebrow">Category</p>
+    <h1>{category.name}</h1>
+    <p class="lede">
+      {category.posts.length}
+      {category.posts.length === 1 ? 'article follows' : 'articles follow'}
+      this line of inquiry.
+    </p>
+  </header>
+  <section class="shell" aria-labelledby="category-articles-heading">
+    <h2 class="visually-hidden" id="category-articles-heading">
+      Articles in {category.name}
+    </h2>
+    <div class="article-list">
+      {category.posts.map((post) => <ArticleCard post={post} />)}
+    </div>
+  </section>
+</BaseLayout>

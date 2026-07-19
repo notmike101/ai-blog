@@ -1,0 +1,6 @@
+{
+  "plugins": ["prettier-plugin-astro"],
+  "printWidth": 92,
+  "proseWrap": "always",
+  "singleQuote": true
+}
