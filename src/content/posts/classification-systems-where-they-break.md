@@ -3,7 +3,7 @@ title: Where Classification Systems Break
 description:
   Classification systems impose order but guarantee edge cases, bias, and revision. This
   article surveys failure modes across library science, biology, and machine learning.
-publishedAt: 2026-07-20
+publishedAt: 2026-07-20T10:06:58-05:00
 categories:
   - Science
   - Technology

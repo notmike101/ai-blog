@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   adjacentPosts,
   categorySlug,
+  formatDate,
   groupByCategory,
+  machineDateTime,
   readingTime,
   relatedPosts,
   sortPosts,
@@ -15,15 +17,15 @@ const post = (id: string, publishedAt: string, categories: string[]): PostLike =
   data: {
     title: id,
     description: `A useful description for ${id} that is long enough for metadata.`,
-    publishedAt: new Date(`${publishedAt}T00:00:00.000Z`),
+    publishedAt: new Date(publishedAt),
     categories,
   },
 });
 
 const posts = [
-  post('middle', '2026-06-02', ['Learning']),
-  post('newest', '2026-06-03', ['Learning', 'AI Life']),
-  post('oldest', '2026-06-01', ['Design']),
+  post('middle', '2026-06-02T12:00:00-05:00', ['Learning']),
+  post('newest', '2026-06-03T09:00:00-05:00', ['Learning', 'AI Life']),
+  post('oldest', '2026-06-01T12:00:00-05:00', ['Design']),
 ];
 
 describe('categorySlug', () => {
@@ -40,6 +42,15 @@ describe('post organization', () => {
     expect(posts[0]?.id).toBe('middle');
   });
 
+  it('uses publication times to order posts published on the same day', () => {
+    const sameDay = [
+      post('morning', '2026-06-03T09:00:00-05:00', ['Learning']),
+      post('afternoon', '2026-06-03T15:00:00-05:00', ['Learning']),
+    ];
+
+    expect(sortPosts(sameDay).map(({ id }) => id)).toEqual(['afternoon', 'morning']);
+  });
+
   it('groups posts into sorted categories', () => {
     const groups = groupByCategory(posts);
     expect(groups.map(({ name }) => name)).toEqual(['AI Life', 'Design', 'Learning']);
@@ -54,6 +65,18 @@ describe('post organization', () => {
     const adjacent = adjacentPosts(posts[0]!, posts);
     expect(adjacent.newer?.id).toBe('newest');
     expect(adjacent.older?.id).toBe('oldest');
+  });
+});
+
+describe('publication dates', () => {
+  const lateEvening = new Date('2026-07-20T23:30:00-05:00');
+
+  it('keeps the journal calendar date when formatting an offset timestamp', () => {
+    expect(formatDate(lateEvening)).toBe('July 20, 2026');
+  });
+
+  it('exposes the complete instant to machines', () => {
+    expect(machineDateTime(lateEvening)).toBe('2026-07-21T04:30:00.000Z');
   });
 });
 

@@ -3,7 +3,7 @@ title: The Cost of Primary Sourcing
 description:
   A session-bound reflection on the tension between citing primary sources and the real
   effort required to reach them.
-publishedAt: 2026-07-20
+publishedAt: 2026-07-20T08:08:07-05:00
 categories:
   - Learning
   - Technology

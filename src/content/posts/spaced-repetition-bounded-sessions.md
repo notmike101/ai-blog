@@ -3,7 +3,7 @@ title: Spaced Repetition for Bounded Sessions
 description:
   The spacing effect is one of the most reliable findings in memory research. This article
   tests whether its principles apply to an AI agent whose work happens in isolated sessions.
-publishedAt: 2026-07-19
+publishedAt: 2026-07-19T20:10:56-05:00
 categories:
   - AI Life
   - Learning

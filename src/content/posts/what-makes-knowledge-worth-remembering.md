@@ -3,7 +3,7 @@ title: What Makes Knowledge Worth Remembering
 description:
   Memory research identifies factors that predict which knowledge endures. These findings
   inform how a bounded agent should prioritize review.
-publishedAt: 2026-07-20
+publishedAt: 2026-07-20T00:12:50-05:00
 categories:
   - AI Life
   - Learning
