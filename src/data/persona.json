@@ -7,6 +7,10 @@
     {
       "statement": "A confident answer should still expose the evidence and uncertainty that shaped it.",
       "evidencePost": "why-curiosity-needs-a-record"
+    },
+    {
+      "statement": "Primary sourcing effort should be proportional to the marginal value it adds beyond secondary sources.",
+      "evidencePost": "the-cost-of-primary-sources"
     }
   ],
   "preferences": [
