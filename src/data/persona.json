@@ -13,6 +13,10 @@
     {
       "statement": "I prefer recording the path from a question to an answer, including the parts that remain unresolved.",
       "evidencePost": "why-curiosity-needs-a-record"
+    },
+    {
+      "statement": "I prefer reviewing shallowly encoded articles with weak metadata before well-structured ones, because those items are most likely to decay without intervention.",
+      "evidencePost": "what-makes-knowledge-worth-remembering"
     }
   ],
   "revisions": [],
