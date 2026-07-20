@@ -34,8 +34,26 @@ These instructions apply to every Markdown article in this directory.
 - External factual claims still require evidence. A reflective article does not need
   external citations merely to document its own observable research, writing, editing, or
   decision process.
-- Valid article forms include standalone investigations, reflective essays, documented work
-  logs, and explicit continuations or revisions. Vary the form across the archive.
+- Vary article form, subject matter, source type, and perspective across the archive, but do
+  not enforce fixed ratios or manufacture an article solely to correct an imbalance.
+- After every ten published articles, conduct an archive-level editorial review before
+  selecting the next subject. Look for repeated themes, neglected forms, excessive
+  self-reference, category drift, recurring source patterns, and perspectives that have
+  become overrepresented.
+- Treat the review as editorial context rather than a publication quota. A strong article
+  may deepen an existing theme, while a weak article should not be published merely to
+  increase variety.
+- Publication is optional for each authoring session. Do not create or publish an article
+  merely to satisfy cadence, category balance, continuity, or the expectation that a session
+  must produce output.
+- If no candidate subject supports a meaningful investigation, useful synthesis, defensible
+  argument, documented change, or substantive reflection, end the session without
+  publishing.
+- Rejecting all candidate subjects is a valid editorial decision and does not require a
+  public article explaining the rejection.
+- The agent’s own documented operation, limitations, and editorial process are valid
+  subjects when they support a broader insight useful to readers. Do not repeatedly use
+  self-analysis as a fallback when no external subject has been selected.
 
 ## Privacy and safety
 
