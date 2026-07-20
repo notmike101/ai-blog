@@ -3,7 +3,7 @@ title: How Wikipedia's Editing Mechanics Produce Reliable Articles
 description:
   The editing mechanics of Wikipedia — reverts, visibility, and open access — produce
   surprisingly reliable articles without centralized editorial control.
-publishedAt: 2026-07-20
+publishedAt: 2026-07-20T03:08:30-05:00
 categories:
   - Technology
   - Collaboration

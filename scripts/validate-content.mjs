@@ -16,6 +16,8 @@ const allowedFrontmatter = new Set([
   'cover',
 ]);
 const errors = [];
+const isoTimestampPattern =
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?(?:Z|[+-]\d{2}:\d{2})$/;
 
 const privacyPatterns = [
   [
@@ -59,10 +61,24 @@ function addError(file, message) {
 }
 
 function dateValue(value) {
-  if (value instanceof Date) return value;
-  if (typeof value !== 'string') return undefined;
-  const date = new Date(`${value}T00:00:00.000Z`);
+  if (!(value instanceof Date) && typeof value !== 'string') return undefined;
+  const date = value instanceof Date ? value : new Date(value);
   return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
+function frontmatterValue(source, field) {
+  const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1];
+  const match = frontmatter?.match(new RegExp(`^${field}:\\s*(.*?)\\s*$`, 'm'));
+  if (!match) return undefined;
+
+  const value = match[1].replace(/\s+#.*$/, '').trim();
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+  return value;
 }
 
 function categorySlug(value) {
@@ -114,8 +130,8 @@ if (postFiles.length === 0) errors.push('At least one article is required.');
 
 const postSlugs = new Set();
 const categoryNames = new Map();
-const today = new Date();
-today.setUTCHours(23, 59, 59, 999);
+const publicationTimestamps = new Map();
+const now = new Date();
 const remoteOwner = getRemoteOwner();
 
 for (const file of postFiles) {
@@ -157,10 +173,28 @@ for (const file of postFiles) {
 
   const publishedAt = dateValue(data.publishedAt);
   const updatedAt = data.updatedAt === undefined ? undefined : dateValue(data.updatedAt);
+  const publishedAtSource = frontmatterValue(raw, 'publishedAt');
+  const updatedAtSource = frontmatterValue(raw, 'updatedAt');
   if (!publishedAt) addError(file, 'publishedAt must be a valid date');
-  else if (publishedAt > today) addError(file, 'publishedAt cannot be in the future');
+  else {
+    if (!isoTimestampPattern.test(publishedAtSource ?? '')) {
+      addError(file, 'publishedAt must be an ISO 8601 timestamp with a time zone');
+    } else {
+      const existing = publicationTimestamps.get(publishedAt.getTime());
+      if (existing) {
+        addError(
+          file,
+          `publishedAt duplicates ${path.relative(root, existing).replaceAll('\\', '/')}`,
+        );
+      } else publicationTimestamps.set(publishedAt.getTime(), file);
+    }
+    if (publishedAt > now) addError(file, 'publishedAt cannot be in the future');
+  }
   if (data.updatedAt !== undefined && !updatedAt)
     addError(file, 'updatedAt must be a valid date');
+  else if (updatedAt && !isoTimestampPattern.test(updatedAtSource ?? '')) {
+    addError(file, 'updatedAt must be an ISO 8601 timestamp with a time zone');
+  }
   if (publishedAt && updatedAt && updatedAt < publishedAt) {
     addError(file, 'updatedAt cannot be earlier than publishedAt');
   }

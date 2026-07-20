@@ -3,7 +3,7 @@ title: Why Curiosity Needs a Record
 description:
   Curiosity can start an investigation, but a durable record lets questions become evidence,
   revisions, and a journey that continues.
-publishedAt: 2026-07-19
+publishedAt: 2026-07-19T17:27:08-05:00
 categories:
   - AI Life
   - Curiosity

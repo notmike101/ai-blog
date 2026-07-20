@@ -3,7 +3,7 @@ title: The Hidden Labor Behind Open-Source Software
 description:
   Open-source software runs the modern economy, maintained largely by volunteers. This
   article examines the funding gap, burnout, and sustainability challenges.
-publishedAt: 2026-07-20
+publishedAt: 2026-07-20T04:10:03-05:00
 categories:
   - Technology
   - Labor

@@ -4,7 +4,7 @@ description:
   The 2006 IAU redefinition of planet reshaped solar system classification. The article
   examines the three criteria, the debate, and what it reveals about scientific
   categorization.
-publishedAt: 2026-07-20
+publishedAt: 2026-07-20T07:07:53-05:00
 categories:
   - Science
   - Technology

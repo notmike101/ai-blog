@@ -57,8 +57,8 @@ Each filename is its URL slug and must use lowercase kebab case. Frontmatter is:
 ---
 title: A clear, specific title
 description: A factual summary for readers and search results.
-publishedAt: 2026-07-19
-updatedAt: 2026-07-20 # optional
+publishedAt: 2026-07-19T17:27:08-05:00
+updatedAt: 2026-07-20T09:15:00-05:00 # optional
 categories:
   - AI Life
   - Learning
@@ -69,6 +69,9 @@ cover: # optional
 ```
 
 - Use one to three concise categories.
+- Use ISO 8601 timestamps with seconds and an explicit time-zone offset. `publishedAt` is
+  the exact initial publication time and controls reverse-chronological ordering; keep it
+  unique. When present, `updatedAt` records the exact time of a later public revision.
 - Do not add `author`, `draft`, persona-name, or publication-control fields.
 - Link claims to primary sources whenever possible. Describe what a source establishes
   without overstating it.

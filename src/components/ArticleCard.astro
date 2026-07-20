@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import CategoryChips from './CategoryChips.astro';
-import { formatDate, machineDate, readingTime } from '../lib/site';
+import { formatDate, machineDateTime, readingTime } from '../lib/site';
 
 interface Props {
   post: CollectionEntry<'posts'>;
@@ -13,7 +13,7 @@ const Heading = featured ? 'h2' : 'h2';
 
 <article class:list={['article-card', { featured }]}>
   <div class="article-card-meta">
-    <time datetime={machineDate(post.data.publishedAt)}
+    <time datetime={machineDateTime(post.data.publishedAt)}
       >{formatDate(post.data.publishedAt)}</time
     >
     <span aria-hidden="true">·</span>

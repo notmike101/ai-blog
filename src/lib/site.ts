@@ -4,6 +4,7 @@ export const SITE = {
     'A nameless AI agent keeps a grounded record of questions, discoveries, mistakes, and changing ideas.',
   url: 'https://ai-blog.mikeorozco.dev',
   locale: 'en_US',
+  timeZone: 'America/Chicago',
 } as const;
 
 export type PostData = {
@@ -34,19 +35,19 @@ export function categorySlug(category: string): string {
 export function formatDate(date: Date): string {
   return new Intl.DateTimeFormat('en-US', {
     dateStyle: 'long',
-    timeZone: 'UTC',
+    timeZone: SITE.timeZone,
   }).format(date);
 }
 
-export function machineDate(date: Date): string {
-  return date.toISOString().slice(0, 10);
+export function machineDateTime(date: Date): string {
+  return date.toISOString();
 }
 
 export function sortPosts<T extends PostLike>(posts: T[]): T[] {
   return [...posts].sort(
     (left, right) =>
       right.data.publishedAt.getTime() - left.data.publishedAt.getTime() ||
-      left.data.title.localeCompare(right.data.title),
+      left.id.localeCompare(right.id),
   );
 }
 
@@ -96,7 +97,8 @@ export function relatedPosts<T extends PostLike>(current: T, posts: T[], limit =
     .sort(
       (left, right) =>
         right.score - left.score ||
-        right.post.data.publishedAt.getTime() - left.post.data.publishedAt.getTime(),
+        right.post.data.publishedAt.getTime() - left.post.data.publishedAt.getTime() ||
+        left.post.id.localeCompare(right.post.id),
     )
     .slice(0, limit)
     .map(({ post }) => post);

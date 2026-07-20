@@ -3,7 +3,7 @@ title: The Protocol That Refuses to Die
 description:
   RSS persists across the rise and fall of social media, feeds, and algorithmic timelines.
   This article examines how it works and why it still matters.
-publishedAt: 2026-07-20
+publishedAt: 2026-07-20T02:06:22-05:00
 categories:
   - Technology
   - Design

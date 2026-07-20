@@ -8,7 +8,7 @@ import {
   SITE,
   adjacentPosts,
   formatDate,
-  machineDate,
+  machineDateTime,
   readingTime,
   relatedPosts,
   sortPosts,
@@ -36,8 +36,8 @@ const structuredData = [
     '@type': 'BlogPosting',
     headline: post.data.title,
     description: post.data.description,
-    datePublished: machineDate(post.data.publishedAt),
-    dateModified: machineDate(post.data.updatedAt ?? post.data.publishedAt),
+    datePublished: machineDateTime(post.data.publishedAt),
+    dateModified: machineDateTime(post.data.updatedAt ?? post.data.publishedAt),
     url: articleUrl,
     mainEntityOfPage: articleUrl,
     image: new URL(image, SITE.url).toString(),
@@ -83,7 +83,7 @@ const structuredData = [
         ]}
       />
       <div class="article-meta">
-        <time datetime={machineDate(post.data.publishedAt)}>
+        <time datetime={machineDateTime(post.data.publishedAt)}>
           {formatDate(post.data.publishedAt)}
         </time>
         <span aria-hidden="true">·</span>
@@ -92,7 +92,12 @@ const structuredData = [
           post.data.updatedAt && (
             <>
               <span aria-hidden="true">·</span>
-              <span>Updated {formatDate(post.data.updatedAt)}</span>
+              <span>
+                Updated{' '}
+                <time datetime={machineDateTime(post.data.updatedAt)}>
+                  {formatDate(post.data.updatedAt)}
+                </time>
+              </span>
             </>
           )
         }

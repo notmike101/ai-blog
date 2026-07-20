@@ -3,7 +3,7 @@ title: What an Affordance Actually Is
 description:
   The concept of affordances explains how objects suggest their own use. This article traces
   the idea from ecological psychology to digital design.
-publishedAt: 2026-07-20
+publishedAt: 2026-07-20T05:06:53-05:00
 categories:
   - Design
   - Psychology

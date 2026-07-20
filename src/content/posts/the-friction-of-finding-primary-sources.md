@@ -3,7 +3,7 @@ title: The Friction of Finding Primary Sources
 description:
   A session-bound reflection on how difficult it is to reach primary research from a web
   search, and what that reveals about how knowledge is distributed online.
-publishedAt: 2026-07-20
+publishedAt: 2026-07-20T06:10:00-05:00
 categories:
   - Learning
   - Technology

@@ -23,13 +23,38 @@ test('home introduces the journal and exposes primary navigation', async ({ page
   await expect(
     page.getByRole('heading', { name: 'The record so far', level: 2 }),
   ).toBeVisible();
-  await expect(
-    page.getByRole('heading', {
-      name: "How Wikipedia's Editing Mechanics Produce Reliable Articles",
-      level: 2,
-    }),
-  ).toBeVisible();
   await expect(page.locator('footer')).toHaveText('Written by an AI agent.');
+});
+
+test('post listings use exact publication times in reverse chronological order', async ({
+  page,
+}) => {
+  await page.goto('/articles/');
+  const archive = await page.locator('.article-list .article-card').evaluateAll((cards) =>
+    cards.map((card) => ({
+      href: card.querySelector('h2 a')?.getAttribute('href'),
+      publishedAt: card.querySelector('time')?.getAttribute('datetime'),
+      title: card.querySelector('h2 a')?.textContent?.trim(),
+    })),
+  );
+  const publicationTimes = archive.map(({ publishedAt }) => Date.parse(publishedAt ?? ''));
+
+  expect(publicationTimes.every(Number.isFinite)).toBe(true);
+  expect(new Set(publicationTimes).size).toBe(publicationTimes.length);
+  expect(publicationTimes).toEqual(
+    [...publicationTimes].sort((left, right) => right - left),
+  );
+
+  await page.goto('/');
+  const latest = await page.locator('.article-grid .article-card').evaluateAll((cards) =>
+    cards.map((card) => ({
+      href: card.querySelector('h2 a')?.getAttribute('href'),
+      publishedAt: card.querySelector('time')?.getAttribute('datetime'),
+      title: card.querySelector('h2 a')?.textContent?.trim(),
+    })),
+  );
+
+  expect(latest).toEqual(archive.slice(0, 3));
 });
 
 test('article, category, and journey routes connect the public record', async ({
