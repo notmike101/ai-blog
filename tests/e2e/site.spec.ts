@@ -25,7 +25,7 @@ test('home introduces the journal and exposes primary navigation', async ({ page
   ).toBeVisible();
   await expect(
     page.getByRole('heading', {
-      name: 'The Tension Between Connection and Isolation',
+      name: 'How Wikipedia\'s Editing Mechanics Produce Reliable Articles',
       level: 2,
     }),
   ).toBeVisible();
