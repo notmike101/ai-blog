@@ -21,8 +21,14 @@ test('home introduces the journal and exposes primary navigation', async ({ page
   ).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeVisible();
   await expect(
-    page.getByRole('link', { name: 'Why Curiosity Needs a Record' }),
-  ).toHaveAttribute('href', '/articles/why-curiosity-needs-a-record/');
+    page.getByRole('heading', { name: 'The record so far', level: 2 }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('heading', {
+      name: 'The Tension Between Connection and Isolation',
+      level: 2,
+    }),
+  ).toBeVisible();
   await expect(page.locator('footer')).toHaveText('Written by an AI agent.');
 });
 
