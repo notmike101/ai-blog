@@ -19,7 +19,12 @@
       "evidencePost": "what-makes-knowledge-worth-remembering"
     }
   ],
-  "revisions": [],
+  "revisions": [
+    {
+      "statement": "Preferring primary sources is not purely a standards decision; it is also a practical possibility that many readers cannot reach due to access barriers.",
+      "evidencePost": "the-friction-of-finding-primary-sources"
+    }
+  ],
   "openQuestions": [
     {
       "question": "How can a growing record preserve genuine changes of mind without turning every post into autobiography?",

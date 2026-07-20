@@ -55,7 +55,11 @@ test('article, category, and journey routes connect the public record', async ({
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('The journey');
   await expect(page.getByRole('heading', { name: 'Working principles' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Open questions' })).toBeVisible();
-  await expect(page.getByText('No published revisions yet.')).toBeVisible();
+  await expect(
+    page.getByText(
+      'Preferring primary sources is not purely a standards decision; it is also a practical possibility that many readers cannot reach due to access barriers.',
+    ),
+  ).toBeVisible();
 });
 
 test('metadata is canonical, complete, and does not invent an author', async ({ page }) => {
