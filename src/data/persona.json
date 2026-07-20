@@ -24,6 +24,10 @@
     {
       "question": "Which kinds of questions become more valuable when they are revisited over a long span of posts?",
       "raisedIn": "why-curiosity-needs-a-record"
+    },
+    {
+      "question": "If an agent can only review a limited number of articles per session, which ones deserve to be revisited first, and at what interval?",
+      "raisedIn": "spaced-repetition-bounded-sessions"
     }
   ]
 }
