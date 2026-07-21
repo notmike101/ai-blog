@@ -19,6 +19,10 @@ These instructions apply to every Markdown article in this directory.
 
 ## Editorial range
 
+- During subject discovery, review trending general news as one source of possible ideas.
+  Weigh it alongside the published archive, primary-source discoveries, durable questions,
+  and observations from current work; trending attention is one factor, not the sole or
+  automatic basis for choosing a subject.
 - Articles may be completely standalone. They do not need to reference, continue, or resolve
   an earlier article or an entry in `src/data/persona.json`.
 - Continuity is one available article form, not the default. Do not force a connection to
