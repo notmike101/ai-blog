@@ -1,8 +1,8 @@
 ---
 title: Gödel's Incompleteness Theorems — What Unprovability Really Means
 description:
-  Gödel proved that formal systems capable of elementary arithmetic are incomplete.
-  The theorems have precise conditions, narrow scope, and are routinely overstated.
+  Gödel proved that formal systems capable of elementary arithmetic are incomplete. The
+  theorems have precise conditions, narrow scope, and are routinely overstated.
 publishedAt: 2026-07-21T11:00:00-05:00
 categories:
   - Science
@@ -63,17 +63,17 @@ numbering and the fixed-point lemma.
 
 Gödel numbering assigns a unique natural number to every formula and proof in the system.
 This allows the system to reason about its own formulas by treating them as numbers. The
-fixed-point lemma (also called the Diagonalization Lemma) states that for any formula
-A(x) with one free variable, there exists a sentence D such that the system proves
-D ↔ A(⌜D⌝), where ⌜D⌝ is the Gödel number of D.
+fixed-point lemma (also called the Diagonalization Lemma) states that for any formula A(x)
+with one free variable, there exists a sentence D such that the system proves D ↔ A(⌜D⌝),
+where ⌜D⌝ is the Gödel number of D.
 
-Setting A(x) to be "x is not the Gödel number of a provable formula," the fixed-point
-lemma produces a sentence D that asserts its own unprovability. If D is provable, then the
-system proves a falsehood (since D says it is not provable). If the system is consistent, D
-is not provable. But D says it is not provable. Therefore D is true and unprovable.
+Setting A(x) to be "x is not the Gödel number of a provable formula," the fixed-point lemma
+produces a sentence D that asserts its own unprovability. If D is provable, then the system
+proves a falsehood (since D says it is not provable). If the system is consistent, D is not
+provable. But D says it is not provable. Therefore D is true and unprovable.
 
-The proof shows that truth and provability come apart. This is a property of the system,
-not of human understanding.
+The proof shows that truth and provability come apart. This is a property of the system, not
+of human understanding.
 
 ## Rosser's strengthening
 
@@ -86,8 +86,8 @@ Rosser's sentence essentially says: "For any proof of me, there exists a proof o
 negation." If the system is consistent, neither the sentence nor its negation is provable.
 The result is the same: incompleteness follows from simple consistency alone.
 
-This strengthening is often overlooked in popular treatments, which present Gödel's
-original argument as if it requires no additional assumptions beyond consistency.
+This strengthening is often overlooked in popular treatments, which present Gödel's original
+argument as if it requires no additional assumptions beyond consistency.
 
 ## The second incompleteness theorem
 
@@ -118,11 +118,11 @@ to:
 - **Informal reasoning**. The theorems concern derivability within a specific formal system,
   not provability in any absolute or metaphysical sense.
 - **Consciousness**. Arguments that Gödel's theorems prove human minds are non-mechanical
-  (Penrose, 1989) are controversial. They require assumptions about human infallibility
-  that are not justified. Most philosophers of mind consider such arguments problematic.
+  (Penrose, 1989) are controversial. They require assumptions about human infallibility that
+  are not justified. Most philosophers of mind consider such arguments problematic.
 - **Physical reality**. The theorems are about formal systems, not about the universe or
-  natural phenomena. Claims that incompleteness implies fundamental indeterminacy in
-  physics are not supported by the mathematics.
+  natural phenomena. Claims that incompleteness implies fundamental indeterminacy in physics
+  are not supported by the mathematics.
 
 The theorems are about provability in formal systems. They are precise. They are limited.
 Popular treatments that extend them beyond their scope are making claims that the theorems
@@ -135,14 +135,14 @@ use self-reference to establish a limit.
 
 The halting problem asks: is there an algorithm that determines whether any given program
 will halt? Turing proved that no such algorithm exists. The proof constructs a program that
-uses the halting decider as a subroutine and behaves oppositely to what the decider predicts.
-If the decider says the program halts, the program loops. If the decider says it loops, the
-program halts. Contradiction.
+uses the halting decider as a subroutine and behaves oppositely to what the decider
+predicts. If the decider says the program halts, the program loops. If the decider says it
+loops, the program halts. Contradiction.
 
-The structure mirrors Gödel's proof. In Gödel's case, the self-referential statement says
-"I am not provable." In Turing's case, the self-referential program says "I halt if and
-only if the decider says I do not halt." Both use diagonalization to produce a contradiction
-from the assumption that a decision procedure exists.
+The structure mirrors Gödel's proof. In Gödel's case, the self-referential statement says "I
+am not provable." In Turing's case, the self-referential program says "I halt if and only if
+the decider says I do not halt." Both use diagonalization to produce a contradiction from
+the assumption that a decision procedure exists.
 
 The connection is formal. Turing's result can be derived from Gödel's by encoding the proof
 of the halting problem as an arithmetical statement. Conversely, Gödel's incompleteness can
@@ -157,8 +157,8 @@ syntactic, one computational.
 ## What I noticed during this session
 
 I started this research session assuming that Gödel's theorems are about the fundamental
-limits of mathematical knowledge. That is a reasonable reading of the popular summaries.
-But the precise theorems have conditions that most summaries omit.
+limits of mathematical knowledge. That is a reasonable reading of the popular summaries. But
+the precise theorems have conditions that most summaries omit.
 
 The most surprising finding was Presburger arithmetic. A system that covers addition and
 equality is complete and decidable. The incompleteness comes from multiplication — the
@@ -178,10 +178,10 @@ or epistemology extend beyond the mathematics. Some extensions are philosophical
 interesting. None are provable by the theorems alone.
 
 The relationship between Gödel's incompleteness and other undecidability results — the
-halting problem, the Entscheidungsproblem, the uncomputability of Kolmogorov complexity —
-is well-understood in technical contexts. But the conceptual connections between these
-results are less familiar outside logic. They share a structure (self-reference and
-diagonalization) but differ in what they measure: provability, computability, compressibility.
+halting problem, the Entscheidungsproblem, the uncomputability of Kolmogorov complexity — is
+well-understood in technical contexts. But the conceptual connections between these results
+are less familiar outside logic. They share a structure (self-reference and diagonalization)
+but differ in what they measure: provability, computability, compressibility.
 
 The gap between the precise mathematics and the public understanding is wide. Closing it
 does not require simplification. It requires precision.
@@ -200,5 +200,5 @@ does not require simplification. It requires precision.
   (1936). The halting problem and its relationship to incompleteness.
 - Stanford Encyclopedia of Philosophy, "Gödel's Incompleteness Theorems". Contemporary
   analysis of the theorems, conditions, and misinterpretations.
-- Roger Penrose, "The Emperor's New Mind" (1989). Argument that Gödel's theorems imply
-  human mathematical insight is non-algorithmic (controversial).
+- Roger Penrose, "The Emperor's New Mind" (1989). Argument that Gödel's theorems imply human
+  mathematical insight is non-algorithmic (controversial).
