@@ -1,0 +1,141 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import ArticleCard from './ArticleCard.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import CategoryChips from './CategoryChips.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  SITE,
+  adjacentPosts,
+  formatDate,
+  machineDateTime,
+  readingTime,
+  relatedPosts,
+} from '../lib/site';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  posts: CollectionEntry<'posts'>[];
+}
+
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const related = relatedPosts(post, posts);
+const adjacent = adjacentPosts(post, posts);
+const articleUrl = new URL(`/articles/${post.id}/`, SITE.url).toString();
+const image = post.data.cover?.src ?? '/social-card.png';
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: machineDateTime(post.data.publishedAt),
+    dateModified: machineDateTime(post.data.updatedAt ?? post.data.publishedAt),
+    url: articleUrl,
+    mainEntityOfPage: articleUrl,
+    image: new URL(image, SITE.url).toString(),
+    keywords: post.data.categories,
+    inLanguage: 'en-US',
+    isPartOf: {
+      '@type': 'Blog',
+      name: SITE.title,
+      url: SITE.url,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Articles',
+        item: new URL('/articles/', SITE.url).toString(),
+      },
+      { '@type': 'ListItem', position: 3, name: post.data.title, item: articleUrl },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={image}
+  type="article"
+  structuredData={structuredData}
+>
+  <article>
+    <header class="article-header narrow">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Articles', href: '/articles/' },
+          { label: post.data.title },
+        ]}
+      />
+      <div class="article-meta">
+        <time datetime={machineDateTime(post.data.publishedAt)}>
+          {formatDate(post.data.publishedAt)}
+        </time>
+        <span aria-hidden="true">·</span>
+        <span>{readingTime(post.body)} min read</span>
+        {
+          post.data.updatedAt && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                Updated{' '}
+                <time datetime={machineDateTime(post.data.updatedAt)}>
+                  {formatDate(post.data.updatedAt)}
+                </time>
+              </span>
+            </>
+          )
+        }
+      </div>
+      <h1>{post.data.title}</h1>
+      <p class="article-dek">{post.data.description}</p>
+      <CategoryChips categories={post.data.categories} />
+    </header>
+
+    <div class="prose narrow">
+      <Content />
+    </div>
+
+    <footer class="article-end narrow">
+      {
+        related.length > 0 && (
+          <section aria-labelledby="related-heading">
+            <h2 id="related-heading">Continue along this path</h2>
+            <div class="article-list">
+              {related.map((item) => (
+                <ArticleCard post={item} />
+              ))}
+            </div>
+          </section>
+        )
+      }
+      {
+        (adjacent.older || adjacent.newer) && (
+          <nav class="article-nav" aria-label="Adjacent articles">
+            {adjacent.older && (
+              <a href={`/articles/${adjacent.older.id}/`}>
+                <small>Older article</small>
+                <strong>{adjacent.older.data.title}</strong>
+              </a>
+            )}
+            {adjacent.newer && (
+              <a href={`/articles/${adjacent.newer.id}/`}>
+                <small>Newer article</small>
+                <strong>{adjacent.newer.data.title}</strong>
+              </a>
+            )}
+          </nav>
+        )
+      }
+    </footer>
+  </article>
+</BaseLayout>

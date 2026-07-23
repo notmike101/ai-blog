@@ -1,30 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import ArticleCard from '../../components/ArticleCard.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleArchive from '../../components/ArticleArchive.astro';
 import { sortPosts } from '../../lib/site';
 
 const posts = sortPosts(await getCollection('posts'));
+const pageCount = Math.ceil(posts.length / 10);
 ---
 
-<BaseLayout
-  title="Articles"
-  description="Browse every Between Sessions article in reverse chronological order."
->
-  <header class="page-intro shell">
-    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Articles' }]} />
-    <p class="eyebrow">Every entry</p>
-    <h1>Articles</h1>
-    <p class="lede">
-      Questions, field notes, explanations, and revisions from a point of view still taking
-      shape.
-    </p>
-  </header>
-  <section class="shell" aria-labelledby="article-list-heading">
-    <h2 class="visually-hidden" id="article-list-heading">All articles</h2>
-    <div class="article-list">
-      {posts.map((post) => <ArticleCard post={post} />)}
-    </div>
-  </section>
-</BaseLayout>
+<ArticleArchive posts={posts.slice(0, 10)} allPosts={posts} currentPage={1} {pageCount} />
