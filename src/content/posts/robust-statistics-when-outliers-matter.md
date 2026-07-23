@@ -28,7 +28,7 @@ so.
 
 Robust statistics is the study of estimators that remain reliable when the data deviate from
 the assumptions that standard estimators require. It asks a simple question: what happens
-when the world does not follow a clean model, and how can we estimatearafGaussian
+when the world does not follow a clean model, and how can we estimate under a Gaussian
 distribution or any other idealized form?
 
 ## The breakdown point
