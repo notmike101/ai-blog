@@ -4,6 +4,7 @@ import { expect, test } from '@playwright/test';
 const primaryRoutes = [
   '/',
   '/articles/',
+  '/articles/2/',
   '/articles/why-curiosity-needs-a-record/',
   '/categories/',
   '/categories/curiosity/',
@@ -34,13 +35,30 @@ test('post listings use exact publication times in reverse chronological order',
   page,
 }) => {
   await page.goto('/articles/');
-  const archive = await page.locator('.article-list .article-card').evaluateAll((cards) =>
-    cards.map((card) => ({
-      href: card.querySelector('h2 a')?.getAttribute('href'),
-      publishedAt: card.querySelector('time')?.getAttribute('datetime'),
-      title: card.querySelector('h2 a')?.textContent?.trim(),
-    })),
-  );
+  const firstPage = await page
+    .locator('[data-archive-content] .article-card')
+    .evaluateAll((cards) =>
+      cards.map((card) => ({
+        href: card.querySelector('h2 a')?.getAttribute('href'),
+        publishedAt: card.querySelector('time')?.getAttribute('datetime'),
+        title: card.querySelector('h2 a')?.textContent?.trim(),
+      })),
+    );
+  expect(firstPage).toHaveLength(10);
+
+  await page.goto('/articles/2/');
+  const secondPage = await page
+    .locator('[data-archive-content] .article-card')
+    .evaluateAll((cards) =>
+      cards.map((card) => ({
+        href: card.querySelector('h2 a')?.getAttribute('href'),
+        publishedAt: card.querySelector('time')?.getAttribute('datetime'),
+        title: card.querySelector('h2 a')?.textContent?.trim(),
+      })),
+    );
+  expect(secondPage).toHaveLength(10);
+
+  const archive = [...firstPage, ...secondPage];
   const publicationTimes = archive.map(({ publishedAt }) => Date.parse(publishedAt ?? ''));
 
   expect(publicationTimes.every(Number.isFinite)).toBe(true);
@@ -58,7 +76,95 @@ test('post listings use exact publication times in reverse chronological order',
     })),
   );
 
-  expect(latest).toEqual(archive.slice(0, 3));
+  expect(latest).toEqual(firstPage.slice(0, 3));
+});
+
+test('article pagination exposes stable page navigation', async ({ page, request }) => {
+  await page.goto('/articles/');
+  const navigation = page.getByRole('navigation', { name: 'Article archive pages' });
+  await expect(navigation.getByRole('link', { name: 'Page 1' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(navigation.getByText('Previous', { exact: true })).toHaveAttribute(
+    'aria-disabled',
+    'true',
+  );
+  await expect(navigation.getByRole('link', { name: 'Next' })).toHaveAttribute(
+    'href',
+    '/articles/2/',
+  );
+
+  const pageLinks = await navigation
+    .locator('ol a')
+    .evaluateAll((links) => links.map((link) => link.getAttribute('href') ?? ''));
+  expect(pageLinks[0]).toBe('/articles/');
+  expect(pageLinks.length).toBeGreaterThan(2);
+  for (const href of pageLinks) {
+    const response = await request.get(href);
+    expect(response.ok(), `${href} should resolve`).toBe(true);
+  }
+
+  await page.goto('/articles/2/');
+  await expect(
+    page.getByRole('navigation', { name: 'Article archive pages' }).getByRole('link', {
+      name: 'Page 2',
+    }),
+  ).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('link', { name: 'Previous' })).toHaveAttribute(
+    'href',
+    '/articles/',
+  );
+});
+
+test('article search covers the full archive and preserves its query', async ({ page }) => {
+  await page.goto('/articles/');
+  const input = page.getByRole('searchbox', { name: 'Search the archive' });
+
+  await input.fill('Why Curiosity Needs a Record');
+  await expect(page.getByText('1 article found')).toBeVisible();
+  await expect(
+    page.locator('[data-search-results]').getByRole('link', {
+      name: 'Why Curiosity Needs a Record',
+    }),
+  ).toBeVisible();
+  await expect(page).toHaveURL(/\?q=Why\+Curiosity\+Needs\+a\+Record$/);
+
+  await page.reload();
+  await expect(input).toHaveValue('Why Curiosity Needs a Record');
+  await expect(page.getByText('1 article found')).toBeVisible();
+
+  await input.fill('Curiosity');
+  await expect(
+    page
+      .locator('[data-search-results]')
+      .getByRole('link', { name: 'Curiosity', exact: true }),
+  ).toBeVisible();
+
+  await input.fill('durable record lets questions become evidence');
+  await expect(page.locator('[data-search-results] .article-card')).not.toHaveCount(0);
+
+  await input.fill('<img src=x onerror=alert(1)>');
+  await expect(page.getByText('0 articles found')).toBeVisible();
+  await expect(page.locator('[data-search-results] img')).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Clear' }).click();
+  await expect(input).toHaveValue('');
+  await expect(page).not.toHaveURL(/\?q=/);
+  await expect(page.locator('[data-archive-content]')).toBeVisible();
+});
+
+test('article pagination remains useful without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto('/articles/2/');
+  await expect(page.locator('[data-search-root]')).toBeHidden();
+  await expect(page.locator('[data-archive-content] .article-card')).toHaveCount(10);
+  await expect(page.getByRole('link', { name: 'Previous' })).toHaveAttribute(
+    'href',
+    '/articles/',
+  );
+  await context.close();
 });
 
 test('article, category, and journey routes connect the public record', async ({
@@ -125,13 +231,10 @@ test('RSS feed contains current posts in reverse chronological order', async ({
   request,
 }) => {
   await page.goto('/articles/');
-  const currentPosts = await page
-    .locator('.article-list .article-card')
-    .evaluateAll((cards) =>
-      cards.map((card) => ({
-        href: card.querySelector('h2 a')?.getAttribute('href'),
-      })),
-    );
+  const currentPosts = await page.locator('#article-search-index').evaluate((element) => {
+    const entries = JSON.parse(element.textContent ?? '[]') as { href: string }[];
+    return entries.map(({ href }) => ({ href }));
+  });
 
   const rss = await request.get('/rss.xml');
   expect(rss.ok()).toBe(true);

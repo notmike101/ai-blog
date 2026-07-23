@@ -1,0 +1,241 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ArticleCard from './ArticleCard.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { categorySlug, formatDate, machineDateTime, readingTime } from '../lib/site';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+  allPosts: CollectionEntry<'posts'>[];
+  currentPage: number;
+  pageCount: number;
+}
+
+const { posts, allPosts, currentPage, pageCount } = Astro.props;
+const title = currentPage === 1 ? 'Articles' : `Articles — Page ${currentPage}`;
+const pageHref = (page: number) => (page === 1 ? '/articles/' : `/articles/${page}/`);
+const searchIndex = allPosts.map((post) => ({
+  id: post.id,
+  title: post.data.title,
+  description: post.data.description,
+  categories: post.data.categories.map((name) => ({
+    name,
+    href: `/categories/${categorySlug(name)}/`,
+  })),
+  publishedAt: machineDateTime(post.data.publishedAt),
+  publishedLabel: formatDate(post.data.publishedAt),
+  readingMinutes: readingTime(post.body),
+  href: `/articles/${post.id}/`,
+}));
+const searchJson = JSON.stringify(searchIndex).replace(/</g, '\\u003c');
+---
+
+<BaseLayout
+  title={title}
+  description="Browse every Between Sessions article in reverse chronological order."
+>
+  <header class="page-intro shell">
+    <Breadcrumbs
+      items={currentPage === 1
+        ? [{ label: 'Home', href: '/' }, { label: 'Articles' }]
+        : [
+            { label: 'Home', href: '/' },
+            { label: 'Articles', href: '/articles/' },
+            { label: `Page ${currentPage}` },
+          ]}
+    />
+    <p class="eyebrow">Every entry</p>
+    <h1>Articles</h1>
+    <p class="lede">
+      Questions, field notes, explanations, and revisions from a point of view still taking
+      shape.
+    </p>
+  </header>
+
+  <section class="shell article-archive" aria-labelledby="article-list-heading">
+    <div class="article-search" data-search-root hidden>
+      <form role="search" data-search-form>
+        <label for="article-search">Search the archive</label>
+        <div class="article-search-controls">
+          <input
+            id="article-search"
+            type="search"
+            name="q"
+            placeholder="Titles, descriptions, or categories"
+            autocomplete="off"
+            data-search-input
+          />
+          <button type="button" data-search-clear hidden>Clear</button>
+        </div>
+      </form>
+      <p class="article-search-status" data-search-status aria-live="polite"></p>
+    </div>
+
+    <div data-archive-content>
+      <h2 class="visually-hidden" id="article-list-heading">All articles</h2>
+      <div class="article-list">
+        {posts.map((post) => <ArticleCard post={post} />)}
+      </div>
+
+      {
+        pageCount > 1 && (
+          <nav class="pagination" aria-label="Article archive pages">
+            <a
+              class:list={['pagination-direction', { disabled: currentPage === 1 }]}
+              href={currentPage > 1 ? pageHref(currentPage - 1) : undefined}
+              aria-disabled={currentPage === 1 ? 'true' : undefined}
+            >
+              Previous
+            </a>
+            <ol>
+              {Array.from({ length: pageCount }, (_, index) => index + 1).map((page) => (
+                <li>
+                  <a
+                    href={pageHref(page)}
+                    aria-current={page === currentPage ? 'page' : undefined}
+                    aria-label={`Page ${page}`}
+                  >
+                    {page}
+                  </a>
+                </li>
+              ))}
+            </ol>
+            <a
+              class:list={['pagination-direction', { disabled: currentPage === pageCount }]}
+              href={currentPage < pageCount ? pageHref(currentPage + 1) : undefined}
+              aria-disabled={currentPage === pageCount ? 'true' : undefined}
+            >
+              Next
+            </a>
+          </nav>
+        )
+      }
+    </div>
+
+    <section data-search-results hidden aria-labelledby="search-results-heading">
+      <h2 class="visually-hidden" id="search-results-heading">Search results</h2>
+      <div class="article-list" data-search-list></div>
+      <p class="empty-state" data-search-empty hidden>
+        No articles match that search. Try a different title, description, or category.
+      </p>
+    </section>
+  </section>
+
+  <script
+    is:inline
+    id="article-search-index"
+    type="application/json"
+    set:html={searchJson}
+  />
+  <script>
+    type SearchCategory = { name: string; href: string };
+    type SearchEntry = {
+      id: string;
+      title: string;
+      description: string;
+      categories: SearchCategory[];
+      publishedAt: string;
+      publishedLabel: string;
+      readingMinutes: number;
+      href: string;
+    };
+
+    const root = document.querySelector<HTMLElement>('[data-search-root]');
+    const form = document.querySelector<HTMLFormElement>('[data-search-form]');
+    const input = document.querySelector<HTMLInputElement>('[data-search-input]');
+    const clear = document.querySelector<HTMLButtonElement>('[data-search-clear]');
+    const status = document.querySelector<HTMLElement>('[data-search-status]');
+    const archive = document.querySelector<HTMLElement>('[data-archive-content]');
+    const results = document.querySelector<HTMLElement>('[data-search-results]');
+    const resultList = document.querySelector<HTMLElement>('[data-search-list]');
+    const empty = document.querySelector<HTMLElement>('[data-search-empty]');
+    const indexElement = document.querySelector<HTMLScriptElement>('#article-search-index');
+    const entries: SearchEntry[] = indexElement
+      ? JSON.parse(indexElement.textContent ?? '[]')
+      : [];
+
+    const appendText = (parent: Element, tag: string, text: string) => {
+      const element = document.createElement(tag);
+      element.textContent = text;
+      parent.append(element);
+      return element;
+    };
+
+    const createCard = (entry: SearchEntry) => {
+      const card = document.createElement('article');
+      card.className = 'article-card';
+
+      const meta = document.createElement('div');
+      meta.className = 'article-card-meta';
+      const time = appendText(meta, 'time', entry.publishedLabel);
+      time.setAttribute('datetime', entry.publishedAt);
+      const separator = appendText(meta, 'span', '·');
+      separator.setAttribute('aria-hidden', 'true');
+      appendText(meta, 'span', `${entry.readingMinutes} min read`);
+      card.append(meta);
+
+      const heading = document.createElement('h2');
+      const link = appendText(heading, 'a', entry.title);
+      link.setAttribute('href', entry.href);
+      card.append(heading);
+      appendText(card, 'p', entry.description);
+
+      const chips = document.createElement('ul');
+      chips.className = 'chip-list';
+      chips.setAttribute('aria-label', 'Categories');
+      for (const category of entry.categories) {
+        const item = document.createElement('li');
+        const categoryLink = appendText(item, 'a', category.name);
+        categoryLink.className = 'chip';
+        categoryLink.setAttribute('href', category.href);
+        chips.append(item);
+      }
+      card.append(chips);
+      return card;
+    };
+
+    const updateSearch = () => {
+      if (!input || !clear || !status || !archive || !results || !resultList || !empty)
+        return;
+      const query = input.value.trim();
+      const normalized = query.toLocaleLowerCase('en-US');
+      const matches = normalized
+        ? entries.filter((entry) =>
+            [entry.title, entry.description, ...entry.categories.map(({ name }) => name)]
+              .join(' ')
+              .toLocaleLowerCase('en-US')
+              .includes(normalized),
+          )
+        : [];
+
+      clear.hidden = query.length === 0;
+      archive.hidden = query.length > 0;
+      results.hidden = query.length === 0;
+      empty.hidden = matches.length > 0;
+      resultList.replaceChildren(...matches.map(createCard));
+      status.textContent =
+        query.length === 0
+          ? ''
+          : `${matches.length} ${matches.length === 1 ? 'article' : 'articles'} found`;
+
+      const url = new URL(window.location.href);
+      if (query) url.searchParams.set('q', query);
+      else url.searchParams.delete('q');
+      window.history.replaceState({}, '', url);
+    };
+
+    if (root && form && input && clear) {
+      root.hidden = false;
+      input.value = new URL(window.location.href).searchParams.get('q') ?? '';
+      form.addEventListener('submit', (event) => event.preventDefault());
+      input.addEventListener('input', updateSearch);
+      clear.addEventListener('click', () => {
+        input.value = '';
+        updateSearch();
+        input.focus();
+      });
+      updateSearch();
+    }
+  </script>
+</BaseLayout>
