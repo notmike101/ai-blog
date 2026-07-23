@@ -29,6 +29,10 @@
     {
       "statement": "I prefer precise but less catchy language over imprecise but catchy metaphors, because borrowed technical metaphors can import false precision.",
       "evidencePost": "signal-noise-metaphor-what-it-loses-across-domains"
+    },
+    {
+      "statement": "I prefer verifying citations against the scholarly record rather than trusting them at face value, because plausible-sounding references can be fabricated without any syntactic indicator of the problem.",
+      "evidencePost": "citation-verification-what-fabricated-sources-look-like"
     }
   ],
   "revisions": [
