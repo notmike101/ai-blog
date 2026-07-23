@@ -23,7 +23,11 @@ test('home introduces the journal and exposes primary navigation', async ({ page
   await expect(
     page.getByRole('heading', { name: 'The record so far', level: 2 }),
   ).toBeVisible();
-  await expect(page.locator('footer')).toHaveText('Written by an AI agent.');
+  await expect(page.locator('footer')).toContainText('Written by an AI agent.');
+  await expect(page.getByRole('link', { name: 'Subscribe via RSS' })).toHaveAttribute(
+    'href',
+    '/rss.xml',
+  );
 });
 
 test('post listings use exact publication times in reverse chronological order', async ({
@@ -107,12 +111,71 @@ test('metadata is canonical, complete, and does not invent an author', async ({ 
   expect(schemaText).not.toMatch(/"author"/i);
 });
 
-test('feeds and crawler files are available', async ({ request }) => {
+test('pages advertise the generated RSS feed', async ({ page }) => {
+  for (const route of primaryRoutes) {
+    await page.goto(route);
+    await expect(
+      page.locator('link[rel="alternate"][type="application/rss+xml"]'),
+    ).toHaveAttribute('href', '/rss.xml');
+  }
+});
+
+test('RSS feed contains current posts in reverse chronological order', async ({
+  page,
+  request,
+}) => {
+  await page.goto('/articles/');
+  const currentPosts = await page
+    .locator('.article-list .article-card')
+    .evaluateAll((cards) =>
+      cards.map((card) => ({
+        href: card.querySelector('h2 a')?.getAttribute('href'),
+      })),
+    );
+
   const rss = await request.get('/rss.xml');
   expect(rss.ok()).toBe(true);
   expect(rss.headers()['content-type']).toMatch(/^(?:application\/rss\+xml|text\/xml)/);
-  expect(await rss.text()).toContain('Why Curiosity Needs a Record');
+  const rssText = await rss.text();
+  expect(rssText).toContain('<rss');
+  expect(rssText).toContain('<channel>');
+  expect(rssText).toContain('<title>Between Sessions</title>');
+  expect(rssText).toContain('<link>https://ai-blog.mikeorozco.dev/</link>');
 
+  const items = rssText.match(/<item>[\s\S]*?<\/item>/g) ?? [];
+  expect(items).toHaveLength(currentPosts.length);
+
+  const feedLinks = items.map((item) => item.match(/<link>([^<]+)<\/link>/)?.[1]);
+  expect(feedLinks).toEqual(
+    currentPosts.map(({ href }) => `https://ai-blog.mikeorozco.dev${href}`),
+  );
+
+  const publicationTimes = items.map((item) => {
+    expect(item).toMatch(/<title>[^<]+<\/title>/);
+    expect(item).toMatch(/<description>[\s\S]+<\/description>/);
+    expect(item).toMatch(
+      /<link>https:\/\/ai-blog\.mikeorozco\.dev\/articles\/[^<]+\/<\/link>/,
+    );
+    expect(item).toMatch(
+      /<guid isPermaLink="true">https:\/\/ai-blog\.mikeorozco\.dev\/articles\/[^<]+\/<\/guid>/,
+    );
+    expect(item).toMatch(/<category>[^<]+<\/category>/);
+
+    const link = item.match(/<link>([^<]+)<\/link>/)?.[1];
+    const guid = item.match(/<guid isPermaLink="true">([^<]+)<\/guid>/)?.[1];
+    expect(guid).toBe(link);
+
+    const pubDate = item.match(/<pubDate>([^<]+)<\/pubDate>/)?.[1] ?? '';
+    const timestamp = Date.parse(pubDate);
+    expect(timestamp).not.toBeNaN();
+    return timestamp;
+  });
+  expect(publicationTimes).toEqual(
+    [...publicationTimes].sort((left, right) => right - left),
+  );
+});
+
+test('crawler files are available', async ({ request }) => {
   const robots = await request.get('/robots.txt');
   expect(robots.ok()).toBe(true);
   expect(await robots.text()).toContain(
