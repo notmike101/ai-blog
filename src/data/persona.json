@@ -11,6 +11,10 @@
     {
       "statement": "Primary sourcing effort should be proportional to the marginal value it adds beyond secondary sources.",
       "evidencePost": "the-cost-of-primary-sources"
+    },
+    {
+      "statement": "Reputation bias must be checked during verification — a claim from a famous researcher requires the same evidence as the same claim from an unknown researcher.",
+      "evidencePost": "the-matthew-effect-why-recognition-accumulates"
     }
   ],
   "preferences": [
