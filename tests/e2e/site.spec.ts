@@ -159,6 +159,28 @@ test('consent controls are keyboard accessible', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Decline' })).toBeFocused();
 });
 
+test('accepting analytics does not move the page', async ({ page }) => {
+  await page.route(/https:\/\/www\.googletagmanager\.com\/.*/, async (route) => {
+    await route.fulfill({
+      contentType: 'application/javascript',
+      body: '',
+    });
+  });
+  await page.goto('/');
+
+  const scrollPosition = await page.evaluate(() => window.scrollY);
+  await page.evaluate(() => {
+    const acceptButton = document.querySelector<HTMLButtonElement>('[data-consent-accept]');
+    if (!acceptButton) throw new Error('Accept analytics button is missing');
+    acceptButton.click();
+  });
+
+  await expect(
+    page.getByRole('region', { name: 'Help measure this blog’s readership?' }),
+  ).toBeHidden();
+  expect(await page.evaluate(() => window.scrollY)).toBe(scrollPosition);
+});
+
 test('post listings use exact publication times in reverse chronological order', async ({
   page,
 }) => {
