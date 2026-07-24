@@ -103,7 +103,7 @@
       saveChoice('granted');
       hideBanner();
       loadAnalytics();
-      choicesButton.focus();
+      choicesButton.focus({ preventScroll: true });
     });
 
     declineButton.addEventListener('click', () => {
