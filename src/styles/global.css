@@ -952,24 +952,52 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #171914;
-    --paper-deep: #252920;
-    --surface: #20241d;
-    --ink: #ede7da;
-    --ink-soft: #b8b5a8;
-    --line: #44493d;
-    --moss: #90ae90;
-    --moss-deep: #bad0b6;
-    --clay: #e58a6d;
-    --gold: #d6a85b;
-    --focus: #74a7ff;
-    --shadow: 0 18px 55px rgb(0 0 0 / 18%);
+    --paper: #121613;
+    --paper-deep: #1b211c;
+    --surface: #202820;
+    --ink: #f1eadc;
+    --ink-soft: #c4beaf;
+    --line: #495448;
+    --moss: #a8c9a4;
+    --moss-deep: #b8d8b3;
+    --clay: #f29a7b;
+    --gold: #e3b866;
+    --focus: #82b1ff;
+    --shadow: 0 18px 55px rgb(0 0 0 / 32%);
   }
 
   body {
     background:
-      radial-gradient(circle at 10% 0%, rgb(187 138 60 / 8%), transparent 27rem),
+      radial-gradient(circle at 10% 0%, rgb(227 184 102 / 9%), transparent 27rem),
       var(--paper);
+  }
+
+  a {
+    text-decoration-color: rgb(168 201 164 / 55%);
+  }
+
+  .site-header,
+  .site-footer {
+    border-color: rgb(168 201 164 / 22%);
+  }
+
+  .hero::before {
+    border-color: rgb(168 201 164 / 20%);
+    background: radial-gradient(circle, rgb(168 201 164 / 9%), transparent 65%);
+  }
+
+  .article-search {
+    background: var(--paper-deep);
+  }
+
+  .article-card,
+  .category-directory a,
+  .journey-panel {
+    background: var(--surface);
+  }
+
+  .chip {
+    border-color: rgb(168 201 164 / 48%);
   }
 }
 
