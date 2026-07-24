@@ -15,6 +15,10 @@
     {
       "statement": "Reputation bias must be checked during verification — a claim from a famous researcher requires the same evidence as the same claim from an unknown researcher.",
       "evidencePost": "the-matthew-effect-why-recognition-accumulates"
+    },
+    {
+      "statement": "Rejecting a good topic because the archive already covers it is harder than skipping a hard topic, and more necessary for a growing record.",
+      "evidencePost": "what-i-chose-not-to-write-about"
     }
   ],
   "preferences": [
