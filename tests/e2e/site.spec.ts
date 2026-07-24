@@ -11,6 +11,31 @@ const primaryRoutes = [
   '/journey/',
 ];
 
+const parseRgb = (value: string) => {
+  const channels = value
+    .match(/[\d.]+/g)
+    ?.slice(0, 3)
+    .map(Number);
+  if (!channels || channels.length !== 3) throw new Error(`Unsupported color: ${value}`);
+  return channels;
+};
+
+const relativeLuminance = (value: string) => {
+  const [red, green, blue] = parseRgb(value).map((channel) => {
+    const normalized = channel / 255;
+    return normalized <= 0.04045
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
+  });
+  return red! * 0.2126 + green! * 0.7152 + blue! * 0.0722;
+};
+
+const contrastRatio = (foreground: string, background: string) => {
+  const lighter = Math.max(relativeLuminance(foreground), relativeLuminance(background));
+  const darker = Math.min(relativeLuminance(foreground), relativeLuminance(background));
+  return (lighter + 0.05) / (darker + 0.05);
+};
+
 test('home introduces the journal and exposes primary navigation', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Between Sessions');
@@ -304,6 +329,75 @@ for (const route of primaryRoutes) {
     expect(results.violations).toEqual([]);
   });
 }
+
+test('dark mode uses dark surfaces with accessible text contrast', async ({ browser }) => {
+  const context = await browser.newContext({ colorScheme: 'dark' });
+  const page = await context.newPage();
+
+  const checks = [
+    {
+      route: '/',
+      selectors: [
+        { selector: 'body', darkSurface: true },
+        { selector: '.article-card', darkSurface: true },
+        { selector: '.button-link', darkSurface: false },
+      ],
+    },
+    {
+      route: '/articles/',
+      selectors: [
+        { selector: '.article-search', darkSurface: true },
+        { selector: '.article-search input', darkSurface: true },
+        { selector: '.article-card', darkSurface: true },
+      ],
+    },
+    {
+      route: '/articles/why-curiosity-needs-a-record/',
+      selectors: [
+        { selector: 'body', darkSurface: true },
+        { selector: '.prose', darkSurface: true },
+        { selector: '.article-nav a', darkSurface: true },
+      ],
+    },
+    {
+      route: '/journey/',
+      selectors: [
+        { selector: 'body', darkSurface: true },
+        { selector: '.journey-panel', darkSurface: true },
+      ],
+    },
+  ];
+
+  for (const { route, selectors } of checks) {
+    await page.goto(route);
+
+    for (const { selector, darkSurface } of selectors) {
+      const colors = await page
+        .locator(selector)
+        .first()
+        .evaluate((element) => {
+          const style = getComputedStyle(element);
+          return { background: style.backgroundColor, foreground: style.color };
+        });
+
+      if (darkSurface) {
+        expect(
+          relativeLuminance(colors.background),
+          `${route} ${selector} should retain a dark background`,
+        ).toBeLessThan(0.08);
+      }
+      expect(
+        contrastRatio(colors.foreground, colors.background),
+        `${route} ${selector} should meet WCAG AA contrast`,
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+  }
+
+  await context.close();
+});
 
 test('all local links on primary pages resolve', async ({ page, request }) => {
   const paths = new Set<string>();
