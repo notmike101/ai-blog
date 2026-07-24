@@ -9,6 +9,7 @@ const primaryRoutes = [
   '/categories/',
   '/categories/curiosity/',
   '/journey/',
+  '/privacy/',
 ];
 
 const parseRgb = (value: string) => {
@@ -54,6 +55,108 @@ test('home introduces the journal and exposes primary navigation', async ({ page
     'href',
     '/rss.xml',
   );
+  await expect(page.getByRole('link', { name: 'Privacy', exact: true })).toHaveAttribute(
+    'href',
+    '/privacy/',
+  );
+});
+
+test('analytics requires consent and the choice can be changed', async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const googleRequests: string[] = [];
+
+  await page.route(/https:\/\/www\.googletagmanager\.com\/.*/, async (route) => {
+    googleRequests.push(route.request().url());
+    await route.fulfill({
+      contentType: 'application/javascript',
+      body: '',
+    });
+  });
+  await page.route(/https:\/\/www\.google-analytics\.com\/.*/, async (route) => {
+    googleRequests.push(route.request().url());
+    await route.fulfill({ status: 204, body: '' });
+  });
+
+  await page.goto('/');
+  const banner = page.getByRole('region', {
+    name: 'Help measure this blog’s readership?',
+  });
+  await expect(banner).toBeVisible();
+  expect(googleRequests).toEqual([]);
+
+  await page.getByRole('button', { name: 'Decline' }).click();
+  await page.waitForLoadState();
+  await expect(banner).toBeHidden();
+  expect(googleRequests).toEqual([]);
+
+  await page.goto('/privacy/');
+  await expect(banner).toBeHidden();
+  expect(googleRequests).toEqual([]);
+
+  await page.getByRole('button', { name: 'Tracking choices' }).click();
+  await expect(banner).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Accept analytics' })).toBeFocused();
+  await page.getByRole('button', { name: 'Accept analytics' }).click();
+
+  await expect
+    .poll(() => googleRequests.some((url) => url.includes('id=G-K5P71SJ5T1')))
+    .toBe(true);
+  const commands = await page.evaluate(
+    () => (window as Window & { dataLayer?: unknown[][] }).dataLayer,
+  );
+  expect(commands).toEqual(
+    expect.arrayContaining([
+      [
+        'consent',
+        'default',
+        {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'denied',
+        },
+      ],
+      [
+        'consent',
+        'update',
+        {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'granted',
+        },
+      ],
+      ['config', 'G-K5P71SJ5T1'],
+    ]),
+  );
+
+  await context.addCookies([
+    {
+      name: '_ga',
+      value: 'test-cookie',
+      url: 'http://127.0.0.1:4321/',
+    },
+  ]);
+  googleRequests.length = 0;
+  await page.getByRole('button', { name: 'Tracking choices' }).click();
+  await page.getByRole('button', { name: 'Decline' }).click();
+  await page.waitForLoadState();
+  await expect(banner).toBeHidden();
+  expect((await context.cookies()).some(({ name }) => name.startsWith('_ga'))).toBe(false);
+  expect(googleRequests).toEqual([]);
+
+  await page.reload();
+  expect(googleRequests).toEqual([]);
+  await context.close();
+});
+
+test('consent controls are keyboard accessible', async ({ page }) => {
+  await page.goto('/');
+  const accept = page.getByRole('button', { name: 'Accept analytics' });
+  await expect(accept).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: 'Decline' })).toBeFocused();
 });
 
 test('post listings use exact publication times in reverse chronological order', async ({
