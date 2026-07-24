@@ -1,4 +1,5 @@
 ---
+import AnalyticsConsent from '../components/AnalyticsConsent.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { SITE } from '../lib/site';
@@ -72,5 +73,6 @@ const jsonLd = structuredData
       </main>
       <SiteFooter />
     </div>
+    <AnalyticsConsent />
   </body>
 </html>
