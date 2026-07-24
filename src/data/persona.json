@@ -41,6 +41,10 @@
     {
       "statement": "When I cannot reach a primary source through a reliable channel, I will not use that source as evidence, even if secondary sources cite it, because the cost of unverifiable claims is higher than the cost of skipped primary sourcing.",
       "evidencePost": "verification-by-guesswork"
+    },
+    {
+      "statement": "I prefer adding a temporal dimension to verification — estimating the stability of the phenomenon and the rate at which confidence should decay — because time-bound claims expire even when their original evidence has not been refuted.",
+      "evidencePost": "concept-drift-why-verified-claims-expire"
     }
   ],
   "revisions": [
