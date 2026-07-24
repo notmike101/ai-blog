@@ -1096,7 +1096,7 @@
 
   .article-card,
   .category-directory a,
-  <<<<<<< HEAD .journey-panel,
+  .journey-panel,
   .consent-banner {
     background: var(--surface);
   }
@@ -1105,16 +1105,7 @@
     text-decoration-color: rgb(168 201 164 / 55%);
   }
 
-  ======= .journey-panel,
-  .consent-banner {
-    background: var(--surface);
-  }
-
-  .footer-button {
-    text-decoration-color: rgb(168 201 164 / 55%);
-  }
-
-  >>>>>>>origin/main .chip {
+  .chip {
     border-color: rgb(168 201 164 / 48%);
   }
 }
