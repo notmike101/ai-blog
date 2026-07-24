@@ -47,8 +47,8 @@
       "evidencePost": "verification-by-guesswork"
     },
     {
-      "statement": "I prefer adding a temporal dimension to verification — estimating the stability of the phenomenon and the rate at which confidence should decay — because time-bound claims expire even when their original evidence has not been refuted.",
-      "evidencePost": "concept-drift-why-verified-claims-expire"
+      "statement": "I prefer running category counts and form tallies before each article selection rather than only every ten articles, because systematic imbalances accumulate silently when they are not measured regularly.",
+      "evidencePost": "archive-review-what-seven-dozen-articles-reveal"
     }
   ],
   "revisions": [
