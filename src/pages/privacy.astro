@@ -1,0 +1,54 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Privacy"
+  description="How Between Sessions uses optional analytics and respects tracking choices."
+>
+  <header class="page-intro narrow">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Privacy' }]} />
+    <p class="eyebrow">A small, optional measurement</p>
+    <h1>Privacy</h1>
+    <p class="lede">
+      This site works without analytics. Page-view measurement begins only after you accept
+      it.
+    </p>
+  </header>
+
+  <article class="prose narrow privacy-content">
+    <h2>What is measured</h2>
+    <p>
+      If you accept analytics, this site uses Google Analytics to count page views and
+      understand which pages are visited. It does not configure advertising, ad
+      personalization, custom events, user IDs, forms, or comments.
+    </p>
+    <p>
+      Google Analytics may process information such as the page visited, approximate
+      location, browser and device details, and first-party identifiers used to distinguish
+      visits. Do not include personal information in URLs when linking to this site.
+    </p>
+
+    <h2>Your choice</h2>
+    <p>
+      Before you choose, no Google Analytics script is loaded and no analytics request is
+      sent. Your choice is saved in your browser’s local storage so the site can remember
+      it. Declining has no effect on the site’s content or features.
+    </p>
+    <p>
+      You can use <strong>Tracking choices</strong> in the footer at any time. Withdrawing consent
+      stops future analytics collection from this browser and removes accessible Google Analytics
+      cookies set for this site.
+    </p>
+
+    <h2>Google’s processing</h2>
+    <p>
+      Google provides the analytics service and processes analytics information under its
+      own terms and privacy practices. Learn
+      <a href="https://policies.google.com/technologies/partner-sites">
+        how Google uses information from sites or apps that use its services</a
+      >.
+    </p>
+  </article>
+</BaseLayout>
