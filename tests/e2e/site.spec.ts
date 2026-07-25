@@ -102,10 +102,14 @@ test('analytics requires consent and the choice can be changed', async ({ browse
   await expect
     .poll(() => googleRequests.some((url) => url.includes('id=G-K5P71SJ5T1')))
     .toBe(true);
-  const commands = await page.evaluate(
-    () => (window as Window & { dataLayer?: unknown[][] }).dataLayer,
+  const commands = await page.evaluate(() =>
+    (window as Window & { dataLayer?: ArrayLike<unknown>[] }).dataLayer?.map((command) => ({
+      type: Object.prototype.toString.call(command),
+      values: Array.from(command),
+    })),
   );
-  expect(commands).toEqual(
+  expect(commands?.every(({ type }) => type === '[object Arguments]')).toBe(true);
+  expect(commands?.map(({ values }) => values)).toEqual(
     expect.arrayContaining([
       [
         'consent',

@@ -45,9 +45,9 @@
       }
     };
 
-    const queueGoogleCommand = (...command) => {
+    const queueGoogleCommand = function () {
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push(command);
+      window.dataLayer.push(arguments);
     };
 
     const consentDefaults = {
