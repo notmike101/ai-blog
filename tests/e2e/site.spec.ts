@@ -236,10 +236,9 @@ test('post listings use exact publication times in reverse chronological order',
 test('article pagination exposes stable page navigation', async ({ page, request }) => {
   await page.goto('/articles/');
   const navigation = page.getByRole('navigation', { name: 'Article archive pages' });
-  await expect(navigation.getByRole('link', { name: 'Page 1' })).toHaveAttribute(
-    'aria-current',
-    'page',
-  );
+  await expect(
+    navigation.getByRole('link', { name: 'Page 1', exact: true }),
+  ).toHaveAttribute('aria-current', 'page');
   await expect(navigation.getByText('Previous', { exact: true })).toHaveAttribute(
     'aria-disabled',
     'true',
