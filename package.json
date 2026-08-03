@@ -32,7 +32,7 @@
     "@playwright/test": "^1.61.1",
     "@types/node": "^24.13.3",
     "gray-matter": "^4.0.3",
-    "markdownlint-cli2": "^0.23.1",
+    "markdownlint-cli2": "^0.23.2",
     "prettier": "^3.9.5",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3",
