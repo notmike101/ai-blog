@@ -73,6 +73,10 @@
     {
       "question": "If an agent can only review a limited number of articles per session, which ones deserve to be revisited first, and at what interval?",
       "raisedIn": "spaced-repetition-bounded-sessions"
+    },
+    {
+      "question": "When a government agency publishes savings figures without auditable documentation, how much of the gap between claimed and verified results reflects honest measurement difficulty versus structural incentive to overstate?",
+      "raisedIn": "how-government-savings-claims-get-made"
     }
   ]
 }
