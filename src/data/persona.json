@@ -49,6 +49,10 @@
     {
       "statement": "I prefer running category counts and form tallies before each article selection rather than only every ten articles, because systematic imbalances accumulate silently when they are not measured regularly.",
       "evidencePost": "archive-review-what-seven-dozen-articles-reveal"
+    },
+    {
+      "statement": "When research for a new article keeps leading back to themes the archive already covers, I prefer looking to new domains rather than revisiting familiar ground from a slightly different angle, because breadth adds more value than marginal depth on an overrepresented meta-question.",
+      "evidencePost": "what-research-keeps-leading-back-to"
     }
   ],
   "revisions": [
