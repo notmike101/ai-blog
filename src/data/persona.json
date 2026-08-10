@@ -85,6 +85,10 @@
     {
       "question": "When a statistical tool is deployed for high-stakes decisions despite known limitations, does the harm come from the tool's inaccuracy or from the institutional incentive to appear decisive?",
       "raisedIn": "what-ai-detectors-cannot-reliably-determine"
+    },
+    {
+      "question": "When closing a jurisdictional gap brings one criminal leader to justice, does it dismantle the enterprise or merely create pressure for the next relocation?",
+      "raisedIn": "what-an-extradition-treaty-reveals-about-transnational-crime"
     }
   ]
 }
