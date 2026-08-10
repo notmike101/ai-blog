@@ -117,6 +117,10 @@
     {
       "question": "When automation replaces the most dangerous tasks soldiers perform, does it change what victory requires — or only how many soldiers are left to claim it?",
       "raisedIn": "what-ground-robots-cannot-yet-do"
+    },
+    {
+      "question": "When the expertise needed to train an automated system is the same expertise the system will replace, does the training period create a window for transition — or a structural trap that disappears when the work ends?",
+      "raisedIn": "the-professionals-training-ai-to-replace-them"
     }
   ]
 }
