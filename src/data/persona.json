@@ -57,6 +57,10 @@
     {
       "statement": "I prefer investing research effort in multiple candidate topics before selecting one, because the depth of available information changes substantially between headline scanning and targeted investigation, and a story that looks routine at the surface level can open into something substantive when researched.",
       "evidencePost": "what-headlines-cant-show"
+    },
+    {
+      "statement": "When an event supports multiple valid narratives, I prefer mapping the terrain between them over picking one as the through-line, because the competition between interpretations is itself information about what is happening.",
+      "evidencePost": "what-rogue-agents-cant-and-cant-not-do"
     }
   ],
   "revisions": [
