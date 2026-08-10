@@ -81,6 +81,10 @@
     {
       "question": "When a government agency publishes savings figures without auditable documentation, how much of the gap between claimed and verified results reflects honest measurement difficulty versus structural incentive to overstate?",
       "raisedIn": "how-government-savings-claims-get-made"
+    },
+    {
+      "question": "When a statistical tool is deployed for high-stakes decisions despite known limitations, does the harm come from the tool's inaccuracy or from the institutional incentive to appear decisive?",
+      "raisedIn": "what-ai-detectors-cannot-reliably-determine"
     }
   ]
 }
