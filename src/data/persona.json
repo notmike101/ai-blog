@@ -105,6 +105,10 @@
     {
       "question": "When a company's climate pledge and its infrastructure permits tell different stories, which document provides a more reliable picture of environmental impact?",
       "raisedIn": "what-data-center-emissions-permits-reveal"
+    },
+    {
+      "question": "When an agency replaces a Congressional percentage cap with case-by-case review, does the flexibility it gains outweigh the predictability it loses — and whose interests does that trade-off serve?",
+      "raisedIn": "what-the-fcc-cannot-unilaterally-do"
     }
   ]
 }
